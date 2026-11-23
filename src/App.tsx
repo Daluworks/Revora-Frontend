@@ -26,6 +26,10 @@ import { ScheduledExportsPage } from "./pages/ScheduledExportsPage";
 import { StartupDashboard } from "./pages/StartupDashboard";
 import { KycWizardPage } from "./pages/KycWizardPage";
 import { GovernanceProposalCreatePage } from "./pages/GovernanceProposalCreatePage";
+import { GovernanceProposalsPage } from "./pages/GovernanceProposalsPage";
+import { GovernanceProposalDetailPage } from "./pages/GovernanceProposalDetailPage";
+import { GovernanceDelegationPage } from "./pages/GovernanceDelegationPage";
+import { GovernanceProposalsProvider } from "./context/GovernanceProposalsContext";
 import { AdminAlertsInbox } from "./pages/AdminAlertsInbox";
 import { PayoutSchedule } from "./pages/PayoutSchedule";
 import { GovernanceVoteReceiptDemo } from "./pages/GovernanceVoteReceiptDemo";
@@ -118,8 +122,12 @@ export const routes: RouteObject[] = [
       { path: "/startup/report-revenue", element: <RevenueReportForm /> },
       // Issue #199 – Inline document uploader (Offering Registration wizard)
       { path: "/startup/offering-registration", element: <OfferingRegistrationDemo /> },
+      // Governance routes
+      { path: "/startup/governance/proposals", element: <GovernanceProposalsPage /> },
       // Issue #247 – Governance proposal creation multi-step form
       { path: "/startup/governance/proposals/create", element: <GovernanceProposalCreatePage /> },
+      { path: "/startup/governance/proposals/:id", element: <GovernanceProposalDetailPage /> },
+      { path: "/startup/governance/delegation", element: <GovernanceDelegationPage /> },
       // Issue #472 – Governance vote receipt with on-chain link
       { path: "/startup/governance/vote-receipt", element: <GovernanceVoteReceiptDemo /> },
 
@@ -172,7 +180,9 @@ function AppLayout() {
         </nav>
       </header>
       <main id="main-content" tabIndex={-1}>
-        <Outlet />
+        <GovernanceProposalsProvider>
+          <Outlet />
+        </GovernanceProposalsProvider>
       </main>
       <SiteFooter />
     </>
@@ -217,7 +227,13 @@ function Home() {
                 <Link to="/startup/offering-registration" className="link-styled">Register a RevenueShare offering</Link>
               </li>
               <li>
+                <Link to="/startup/governance/proposals" className="link-styled">Governance proposals</Link>
+              </li>
+              <li>
                 <Link to="/startup/governance/proposals/create" className="link-styled">Create a governance proposal</Link>
+              </li>
+              <li>
+                <Link to="/startup/governance/delegation" className="link-styled">Governance delegation</Link>
               </li>
               <li>
                 <Link to="/startup/governance/vote-receipt" className="link-styled">Governance vote receipt</Link>
